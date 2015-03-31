@@ -32,6 +32,11 @@ public class Pessoa {
 		this.enderecos = new HashSet<Endereco>();
 	}
 	
+	//apenas para o exemplo de CGLIB
+	public Pessoa(Long id){
+		this.id = id;
+	}
+	//
 	public String getNome() {
 		return this.nome;
 	}
