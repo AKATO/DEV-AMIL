@@ -16,7 +16,7 @@ public class MyProxyCGLIBService<T> {
 		list.add(new Pessoa(6l));
 		int qtdeItens = list.getSize();
 		Pessoa p = list.get(6);
-		System.out.println(String.format("Id: %d ", p.getId()));
+		System.out.println(String.format("Id: %d ", p.getNome()));
 		System.out.println(String.format("Qtde Itens na lista: %d ", qtdeItens));
 		}
 }
