@@ -54,5 +54,7 @@ public class Pessoa {
 	public void addEndereco(Endereco endereco) {
 		this.enderecos.add(endereco);
 	}
-	
+	public Pessoa(){
+		
+	}
 }

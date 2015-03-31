@@ -53,4 +53,7 @@ public class Endereco {
 	public void setNumero(Long numero) {
 		this.numero = numero;
 	}
+	
+	
+	public Endereco(){}
 }
