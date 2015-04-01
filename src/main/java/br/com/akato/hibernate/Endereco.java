@@ -29,7 +29,14 @@ public class Endereco {
 		this.numero = numero;
 	}
 	
+	public Endereco(String logradouro,Long numero, Pessoa pessoa){
+		this.logradouro = logradouro;
+		this.numero = numero;
+		this.pessoa = pessoa;
+	}
 	
+	public Endereco(){
+	}
 	
 	
 	

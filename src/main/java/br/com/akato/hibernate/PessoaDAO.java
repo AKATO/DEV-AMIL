@@ -23,7 +23,7 @@ public class PessoaDAO {
 	
 	public void salva(Pessoa p){
 		this.session.save(p);
-		this.salvaEndereco(p);; //adicionado agora
+		this.salvaEndereco(p);
 	}
 	
 	private void salvaEndereco(Pessoa p){

@@ -4,26 +4,55 @@ import org.hibernate.Session;
 
 public class TestaPessoaDAO {
 	public static void main(String[]Args){
+		criarContatosNaBase();
+		executaProxyamentoParaAcessarObjetoNaoCarregado();
+		lancaLazyException();
+	}
+	
+	static void criarContatosNaBase(){
 		Session session = new HibernateUtil().getSession();
-		Pessoa pessoa = new Pessoa("Arthur Kato",38742425875L);
-		Endereco endereco = new Endereco("El.Grajau",292L);
+		PessoaDAO pessoadao = new PessoaDAO(session);
+		Pessoa pessoa = new Pessoa("Renato De Melo",31180069279l);
+		Endereco endereco = new Endereco("Al. Rio Negro",291l,pessoa);
+		Endereco enderecoB = new Endereco("Al. Cauaxi",721l,pessoa);
 		pessoa.addEndereco(endereco);
-		PessoaDAO dao = new PessoaDAO(session);
+		pessoa.addEndereco(enderecoB);
 		session.beginTransaction();
-		dao.salva(pessoa);
+		pessoadao.salva(pessoa);
 		session.getTransaction().commit();
-		System.out.println(" Foi adicionado a pessoa : " + pessoa.getNome());
-		
+	}
+	static void executaProxyamentoParaAcessarObjetoNaoCarregado(){
+		Session session = new HibernateUtil().getSession();
+		System.out.println("Sessao Aberta");
+		PessoaDAO pessoadao = new PessoaDAO(session);
+		Pessoa pessoa = pessoadao.busca(3l);
+		Object enderecoProxy = pessoa.getEnderecos();
+		System.out.println("O objeto de persistencia com inicializacao `tardia` esta sendo proxyado");
+		org.hibernate.proxy.HibernateProxy objeto = (org.hibernate.proxy.HibernateProxy) pessoa;
+		System.out.println("Para o o objet Pessoa foi gerado um objeto Proxy" + objeto.getClass());
+		org.hibernate.collection.internal.PersistentSet persistentSet = (org.hibernate.collection.internal.PersistentSet) enderecoProxy;
+		System.out.println("O Set de Enderecos foi proxiado pela classe : " + persistentSet.getClass() + " , valor : "+ persistentSet.toString());
 		session.close();
+		System.out.println("Sessao Fechada");
+		System.out.println(""+pessoa.getNome()+":");
+		for(Endereco endereco:pessoa.getEnderecos()){
+			System.out.println(" Endereco de Id : " + endereco.getId() +", :  " + endereco.getLogradouro() + endereco.getNumero());
+		}
+	}
+	static void lancaLazyException(){
+		Session session = new HibernateUtil().getSession();
+		PessoaDAO pessoadao = new PessoaDAO(session);
+		Pessoa pessoa = pessoadao.busca(3l);
+		session.close();
+		System.out.println("-------------------------------");
+		System.out.println("Sessao Fechada");
+		System.out.println(""+pessoa.getNome()+":");
+		for(Endereco endereco:pessoa.getEnderecos()){
+			System.out.println(" Endereco de Id : " + endereco.getId() +", :  " + endereco.getLogradouro() + endereco.getNumero());
+		}
 
-		
 	}
 
+
 }
-//System.out.println(" Foi adicionada a pessoa : " + p.getNome());
-
-
-//pessoa.setNome("Arthur Kato");
-//pessoa.setCpf(38742425875L);
-//
 
