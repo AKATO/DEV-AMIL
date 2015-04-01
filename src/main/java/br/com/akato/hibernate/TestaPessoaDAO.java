@@ -4,8 +4,22 @@ import org.hibernate.Session;
 
 public class TestaPessoaDAO {
 	public static void main(String[]Args){
+		criarContatosNaBase();
 		executaProxyamentoParaAcessarObjetoNaoCarregado();
 		lancaLazyException();
+	}
+	
+	static void criarContatosNaBase(){
+		Session session = new HibernateUtil().getSession();
+		PessoaDAO pessoadao = new PessoaDAO(session);
+		Pessoa pessoa = new Pessoa("Renato De Melo",31180069279l);
+		Endereco endereco = new Endereco("Al. Rio Negro",291l,pessoa);
+		Endereco enderecoB = new Endereco("Al. Cauaxi",721l,pessoa);
+		pessoa.addEndereco(endereco);
+		pessoa.addEndereco(enderecoB);
+		session.beginTransaction();
+		pessoadao.salva(pessoa);
+		session.getTransaction().commit();
 	}
 	static void executaProxyamentoParaAcessarObjetoNaoCarregado(){
 		Session session = new HibernateUtil().getSession();
